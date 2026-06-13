@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>招聘网站数据集 · 蔡欣淇</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="container">
+    <div class="course-detail-view">
+        <a href="../index.html" class="back-home-btn">← 返回主页面</a >
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+            <span style="font-size: 2rem;">💼</span>
+            <h2 style="font-size: 1.8rem;">招聘网站数据集</h2>
+        </div>
+        <p style="background: #f1f5f9; padding: 1rem; border-radius: 1rem;">
+            📖 爬取/分析招聘数据，提取关键技能，薪资区间建模，职业趋势洞察。
+        </p >
+        <h3 style="margin-top: 1.8rem;">✍️ 课程实操题 · 共5道</h3>
+
+        <div class="question-block">
+            <h4>📝 实操题1 (岗位关键词)</h4>
+            <p>如何用Python提取招聘描述中的Python关键词频次？</p >
+            <input type="text" class="simple-input" id="answer1" placeholder="输入你的答案">
+            <button class="btn-check" onclick="checkAnswer(1, '使用str.count或正则/分词')">核对答案</button>
+            <div class="feedback" id="feedback1"></div>
+        </div>
+
+        <div class="question-block">
+            <h4>💻 实操题2 (可运行代码)</h4>
+            <p>给定一个列表jobs = ['数据分析师', 'Python开发', '数据运营']，使用循环打印每个职位前加上'岗位: ' 。</p >
+            <div class="code-runner">
+                <textarea id="codeArea" rows="6">jobs = ['数据分析师', 'Python开发', '数据运营']
+for job in jobs:
+    print(f'岗位: {job}')</textarea>
+                <button class="run-code-btn" onclick="runCode()">▶ 运行代码</button>
+                <div class="output-area" id="codeOutput">等待运行...</div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <h4>✅ 实操题3 (选择题)</h4>
+            <p>展示招聘岗位薪资分布的最佳图表是？</p >
+            <label class="choice-item"><input type="radio" name="choice" value="0"> 饼图</label>
+            <label class="choice-item"><input type="radio" name="choice" value="1"> 直方图</label>
+            <label class="choice-item"><input type="radio" name="choice" value="2"> 折线图</label>
+            <label class="choice-item"><input type="radio" name="choice" value="3"> 散点图</label>
+            <button class="btn-check" onclick="checkChoice(1)">提交选择</button>
+            <div class="feedback" id="choiceFeedback"></div>
+        </div>
+
+        <div class="question-block">
+            <h4>📈 实操题4 (平均薪资)</h4>
+            <p>计算薪资列表 [8000,12000,9500,15000] 的中位数。</p >
+            <input type="text" class="simple-input" id="answer4" placeholder="输入你的答案">
+            <button class="btn-check" onclick="checkAnswer(4, '10750')">核对答案</button>
+            <div class="feedback" id="feedback4"></div>
+        </div>
+
+        <div class="question-block">
+            <h4>📊 实操题5 (数据清洗)</h4>
+            <p>写出pandas删除重复值的函数。</p >
+            <input type="text" class="simple-input" id="answer5" placeholder="输入你的答案">
+            <button class="btn-check" onclick="checkAnswer(5, 'drop_duplicates()')">核对答案</button>
+            <div class="feedback" id="feedback5"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkAnswer(questionNum, correctAnswer) {
+        const inputElem = document.getElementById(`answer${questionNum}`);
+        const userAnswer = inputElem.value.trim().toLowerCase().replace(/\s+/g, ' ');
+        const expected = correctAnswer.toLowerCase().replace(/\s+/g, ' ');
+        const feedbackDiv = document.getElementById(`feedback${questionNum}`);
+        if (userAnswer.includes(expected) || expected.includes(userAnswer)) {
+            feedbackDiv.innerHTML = "✅ 回答正确！";
+            feedbackDiv.style.color = "#15803d";
+        } else {
+            feedbackDiv.innerHTML = `❌ 答案不匹配。参考答案: ${correctAnswer}`;
+            feedbackDiv.style.color = "#b91c1c";
+        }
+    }
+    function runCode() {
+        const code = document.getElementById('codeArea').value;
+        const outputDiv = document.getElementById('codeOutput');
+        let logs = [];
+        const originalLog = console.log;
+        console.log = (...args) => { logs.push(args.map(arg => String(arg)).join(' ')); originalLog(...args); };
+        try { new Function(code)(); outputDiv.innerText = logs.join('\n') || "代码执行完毕 (无输出)"; } 
+        catch (err) { outputDiv.innerText = `❌ 运行错误: ${err.message}`; } 
+        finally { console.log = originalLog; }
+    }
+    function checkChoice(correctIndex) {
+        const selected = document.querySelector('input[name="choice"]:checked');
+        const feedbackDiv = document.getElementById('choiceFeedback');
+        if (!selected) { feedbackDiv.innerHTML = "⚠️ 请选择一个选项"; feedbackDiv.style.color = "#b91c1c"; return; }
+        if (parseInt(selected.value) === correctIndex) {
+            feedbackDiv.innerHTML = "✅ 回答正确！直方图最适合展示薪资分布。";
+            feedbackDiv.style.color = "#15803d";
+        } else { feedbackDiv.innerHTML = "❌ 错误。正确答案是：直方图"; feedbackDiv.style.color = "#b91c1c"; }
+    }
+</script>
+</body>
+</html>
